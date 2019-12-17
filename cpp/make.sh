@@ -3,10 +3,10 @@
 g++ --std=c++11 \
   `Magick++-config --cxxflags --cppflags` \
   -g -o peacock_debug src/CB_Converter.cpp src/peacock.cpp \
-  `Magick++-config --ldflags --libs`
+  `Magick++-config --ldflags --libs` -lboost_filesystem -lboost_system
 
 g++ --std=c++11 \
   `Magick++-config --cxxflags --cppflags` \
   -O3 -o peacock_release src/CB_Converter.cpp src/peacock.cpp \
-  `Magick++-config --ldflags --libs`
+  `Magick++-config --ldflags --libs` -lboost_filesystem -lboost_system
 

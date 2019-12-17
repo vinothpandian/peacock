@@ -4,6 +4,10 @@
 #include <vector>
 #include <string>
 #include <Magick++.h>
+#include <boost/filesystem.hpp>
+
+
+using boost::filesystem::path;
 
 #include "CB_Converter.hpp"
 
@@ -28,7 +32,8 @@ CB_Converter::CB_Converter( const std::string & infilename )
   Magick::InitializeMagick( NULL );
 
   // Read image and prepare for modification.
-  image_orig.read( infilename );
+  path pathname(infilename);
+  image_orig.read( pathname.string() );
   image_orig.type( Magick::TrueColorAlphaType );
 
   // Determine range of pixel values (i.e., bit depth).
@@ -85,7 +90,15 @@ void CB_Converter::convert( std::string & cbtype ) {
     outfilename = "CB_";
     outfilename.append( cbtype );
     outfilename.append( "_" );
-    outfilename.append( infilename );
+
+    path newfilename( infilename );
+    path leafname = newfilename.filename();
+    outfilename.append( leafname.string() );
+
+    newfilename = newfilename.remove_leaf();
+    newfilename /= outfilename;
+    
+    outfilename = newfilename.string();
     std::cout << "    Writing " << outfilename << "..." << std::endl;
     image.write( outfilename );
   }
